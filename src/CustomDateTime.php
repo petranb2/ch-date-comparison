@@ -58,6 +58,9 @@ class CustomDateTime
         return $this->date;
     }
 
+    /**
+     * @return string
+     */
     public function toString(): string
     {
         return $this->date . '-' . $this->month . '-' . $this->year;
@@ -66,47 +69,77 @@ class CustomDateTime
     /**
      * @param CustomDateTime $comparable
      * @return CustomDateTime
+     * @throws Exception
      */
-    public function compare(CustomDateTime $comparable ): CustomDateTime
+    public function compare(CustomDateTime $comparable): CustomDateTime
     {
 
         if ($this->getYear() > $comparable->getYear()) {
             echo $this->toString() . ' is greater than ' . $comparable->toString() . PHP_EOL;
             return $this;
+
+        } elseif ($this->getYear() === $comparable->getYear()) {
+            return $this->compareMonths($comparable);
+
+        } else {
+            echo $comparable->toString() . ' is greater than ' . $this->toString() . PHP_EOL;
+            return $comparable;
+
+        }
+    }
+
+
+    /**
+     * @param CustomDateTime $comparable
+     * @return CustomDateTime
+     * @throws Exception
+     */
+    private function compareMonths(CustomDateTime $comparable): CustomDateTime
+    {
+        if ($this->getYear() !== $comparable->getYear()) {
+            throw new Exception('Year must be equal to compare months');
         }
 
         if ($this->getMonth() > $comparable->getMonth()) {
+
             echo $this->toString() . ' is greater than ' . $comparable->toString() . PHP_EOL;
             return $this;
+
+        } elseif ($this->getMonth() === $comparable->getMonth()) {
+
+            return $this->compareDates($comparable);
+
+        } else {
+            echo $comparable->toString() . ' is greater than ' . $this->toString() . PHP_EOL;
+            return $comparable;
+        }
+    }
+
+    /**
+     * @param CustomDateTime $comparable
+     * @return CustomDateTime
+     * @throws Exception
+     */
+    private function compareDates(CustomDateTime $comparable): CustomDateTime
+    {
+        if (($this->getYear() !== $comparable->getYear()) &&
+            ($this->getMonth() !== $comparable->getMonth())) {
+            throw new Exception('Year and month must be equal to compare dates');
         }
 
         if ($this->getDate() > $comparable->getDate()) {
             echo $this->toString() . ' is greater than ' . $comparable->toString() . PHP_EOL;
             return $this;
-        }
 
-        if ($this->isDateEqual($comparable)) {
+        } elseif ($this->getDate() === $comparable->getDate()) {
             echo $comparable->toString() . ' is equal with ' . $this->toString() . PHP_EOL;
             return $comparable;
+
+        } else {
+            echo $comparable->toString() . ' is greater than ' . $this->toString() . PHP_EOL;
+            return $comparable;
+
         }
-
-        echo $comparable->toString() . ' is greater than ' . $this->toString() . PHP_EOL;
-
-        return $comparable;
-
     }
 
-    /**
-     * @param CustomDateTime $dateTime
-     * @return bool
-     */
-    private function isDateEqual(CustomDateTime $dateTime): bool
-    {
-        if (($this->getYear() === $dateTime->getYear()) &&
-            ($this->getMonth() === $dateTime->getMonth()) &&
-            ($this->getDate() === $dateTime->getDate())) {
-            return true;
-        }
-        return false;
-    }
 }
