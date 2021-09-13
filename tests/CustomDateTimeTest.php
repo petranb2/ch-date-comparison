@@ -10,6 +10,19 @@ use PHPUnit\Framework\TestCase;
 final class CustomDateTimeTest extends TestCase
 {
 
+
+    /**
+     * @dataProvider invalidDatesDataProvider
+     * @throws Exception
+     */
+    public function testShouldThrowExceptionWithInvalidData(int $year, int $month, int $date)
+    {
+        // Arrange - Assert
+        $this->expectException(Exception::class);
+        // Act - SUT
+        new CustomDateTime($year, $month, $date);
+    }
+
     /**
      * @dataProvider datesDataProvider
      * @throws Exception
@@ -69,6 +82,19 @@ final class CustomDateTimeTest extends TestCase
             [2022, 6, 6],
             [2023, 7, 7],
             [2020, 10, 10],
+        ];
+    }
+
+    /**
+     * @return string[][]
+     */
+    public function invalidDatesDataProvider(): array
+    {
+        return [
+            [2021, 50, 5],
+            [2022, 6, 50],
+            [2023, -1, 7],
+            [20201548759, 10, 10]
         ];
     }
 }
