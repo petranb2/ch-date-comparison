@@ -7,6 +7,7 @@ cd ch-date-comparison
 
 composer install
 
+// run a sample case of the challenge
 php run.php
 
 // run tests
